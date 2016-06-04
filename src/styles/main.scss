@@ -1,0 +1,70 @@
+html, body {
+  height: 100%;
+  width: 100%;
+  z-index: 0
+}
+
+#content {
+  height: 100%
+}
+
+.np-nav {
+  height: 50px
+}
+
+.np-symbol-image {
+  margin: 5px
+}
+
+.np-image-container {
+  position: relative;
+}
+
+.np-fullscreen {
+  width: 100%;
+  height: 100%;
+}
+
+.np-overlay-bottom {
+  width: 100%;
+  max-height: 75px;
+  position: absolute;
+  bottom: 0px;
+  padding: 5px;
+  background-color: rgba(0, 0, 0, 0.9);
+  color: rgba(200, 200, 200, 1.0);
+}
+
+.np-overlay-top {
+  position: absolute;
+  top: 0px;
+  width: 100%;
+  max-height: 75px;
+  background-color: rgba(0, 0, 0, 0.9);
+}
+
+.np-center {
+  width: 100%;
+  height: 100%;
+  vertical-align: center;
+  align-content: center;
+  text-align: center;;
+}
+
+.np-btn-next {
+  position: absolute;
+  top: 50%;
+  right: 0px;
+  height: 100%;
+  margin-right: 20px;
+}
+
+.np-trace-body {
+  background: rgba(10, 10, 10, 1.0);
+}
+
+.np-samplesform-delete-icon {
+  font-size: 36pt;
+  color: red;
+  margin-top: 25px;
+}
