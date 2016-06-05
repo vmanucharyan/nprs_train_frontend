@@ -51,16 +51,23 @@ gulp.task('clean', cb => {
 });
 
 gulp.task('browserSync', () => {
-  const proxyOptions = url.parse('http://localhost:3000/api');
+  const proxyOptions = url.parse('http://localhost:9292/api');
   proxyOptions.route = '/api';
 
-  const systemProxyOptions = url.parse('http://localhost:3000/system');
+  const systemProxyOptions = url.parse('http://localhost:9292/system');
   systemProxyOptions.route = '/system';
+
+  const usersProxyOptions = url.parse('http://localhost:9292/users');
+  usersProxyOptions.route = '/users';
 
   browserSync({
     server: {
       baseDir: './',
-      middleware: [proxy(proxyOptions), proxy(systemProxyOptions)]
+      middleware: [
+        proxy(proxyOptions),
+        proxy(systemProxyOptions),
+        proxy(usersProxyOptions)
+      ]
     }
   });
 });

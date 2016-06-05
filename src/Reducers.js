@@ -34,6 +34,13 @@ export default function teacherApp(state, action) {
       });
 
     case Actions.RECEIVE_TRACE:
+      if (!action.trace) {
+        return {
+          appState: Actions.AppState.ERROR,
+          errors: ['failed to fetch trace']
+        };
+      }
+
       return Object.assign({}, state, {
         loadingTrace: false,
         trace: action.trace,

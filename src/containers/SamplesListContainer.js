@@ -26,7 +26,6 @@ class SamplesListContainer extends React.Component {
   }
 
   onMarkChanged(sampleIdx, e) {
-    console.log('onMarkChanged');
     const { dispatch } = this.props;
     dispatch(markSample(sampleIdx, e.key.toUpperCase()));
   }

@@ -57,24 +57,36 @@ export function fetchTrace(sourceImageId) {
   return (dispatch) => {
     dispatch(requestTrace(sourceImageId));
 
-    const oReq = new XMLHttpRequest();
-    oReq.open('GET', `/api/source_images/${sourceImageId}/trace_file`, true);
-    oReq.responseType = 'arraybuffer';
-    oReq.onload = () => {
-      const worker = work(require('./workers/LoadTraceWorker.js')); // eslint-disable-line max-len, global-require
+    request
+    .get(`/api/source_images/${sourceImageId}/trace`)
+    .set('Accept', 'application/json')
+    .end((traceErr, traceRes) => {
+      if (!traceRes || traceRes.status !== 200) {
+        dispatch(receiveTrace(null));
+        return;
+      }
 
-      worker.postMessage([oReq.response]);
+      const traceUrl = traceRes.body.trace_url;
 
-      worker.onmessage = (e) => {
-        const parsed = JSON.parse(e.data[0]);
-        dispatch(receiveTrace({
-          regions: parsed.regions,
-          regionsMap: parsed.regions_map
-        }));
+      const oReq = new XMLHttpRequest();
+      oReq.open('GET', traceUrl, true);
+      oReq.responseType = 'arraybuffer';
+      oReq.onload = () => {
+        const worker = work(require('./workers/LoadTraceWorker.js')); // eslint-disable-line max-len, global-require
+
+        worker.postMessage([oReq.response]);
+
+        worker.onmessage = (e) => {
+          const parsed = JSON.parse(e.data[0]);
+          dispatch(receiveTrace({
+            regions: parsed.regions,
+            regionsMap: parsed.regions_map
+          }));
+        };
       };
-    };
 
-    oReq.send();
+      oReq.send();
+    });
   };
 }
 
@@ -122,8 +134,6 @@ export function fetchImage() {
       .get('/api/source_images/unprocessed/first')
       .set('Accept', 'application/json')
       .end((imageErr, imageRes) => {
-        console.log('received image');
-        console.log(imageRes);
         // fetch unprocessed image
         if (imageErr) {
           dispatch(receiveImage(null, -1, -1, ['failed to fetch image']));
@@ -141,9 +151,6 @@ export function fetchImage() {
         request
           .put(`/api/source_images/${sourceImage.id}/lock`)
           .end((lockErr, lockRes) => {
-            console.log('received lock');
-            console.log(lockRes);
-
             if (!lockRes || lockRes.status !== 200) {
               dispatch(receiveImage(null, -1, -1, ['failed to lock image']));
               return;

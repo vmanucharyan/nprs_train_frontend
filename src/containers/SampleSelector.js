@@ -76,7 +76,7 @@ export class SampleSelector extends React.Component {
         </div>
         <div className="fixed-action-btn horizontal" style={{ bottom: '45px', right: '24px' }} >
           <a
-            href="/#/trace"
+            href="#"
             className="btn-floating btn-large"
             onClick={this.onCommitButtonClicked}
           >
